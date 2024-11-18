@@ -277,7 +277,7 @@ comment_to_pull_request() {
   COMMENT_BODY="$1"
 
   curl -s -X POST \
-    -H "Authorization: Bearer ${{ GITHUB_TOKEN }}" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
     -H "Content-Type: application/json" \
     -d "{\"body\": \"$COMMENT_BODY\"}" \
     "https://api.github.com/repos/$REPOSITORY/issues/$ISSUE_NUMBER/comments"
