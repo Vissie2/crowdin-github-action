@@ -252,29 +252,43 @@ push_to_branch() {
 
   git add .
 
+  echo "--->>> 1" 
+
   if [ ! -n "$(git status -s)" ]; then
     echo "NOTHING TO COMMIT"
 
+    echo "--->>> 1.1" 
+
     if [ "$INPUT_ADD_COMMENT" = true ]; then
+      echo "--->>> 1.2" 
       comment_to_pull_request "Crowdin action has been triggered but translations were already up-to-date."
+       echo "--->>> 1.3" 
     fi
 
     return
   fi
 
+    echo "--->>> 2" 
+
   echo "PUSH TO BRANCH ${BRANCH}"
   git commit --no-verify -m "${INPUT_COMMIT_MESSAGE}"
   git push --no-verify --force "${REPO_URL}"
 
+    echo "--->>> 2.1" 
+
   if [ "$INPUT_CREATE_PULL_REQUEST" = true ]; then
+    echo "--->>> 2.2" 
     create_pull_request "${BRANCH}"
   elif [ "$INPUT_ADD_COMMENT" = true ]; then
+    echo "--->>> 2.3" 
     comment_to_pull_request "Crowdin action has been triggered and translations have been synchronized! 🎉"
   fi
 }
 
 comment_to_pull_request() {
   COMMENT_BODY="$1"
+
+    echo "--->>> $COMMENT_BODY" 
 
   curl -s -X POST \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
