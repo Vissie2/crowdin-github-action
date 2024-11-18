@@ -254,6 +254,11 @@ push_to_branch() {
 
   if [ ! -n "$(git status -s)" ]; then
     echo "NOTHING TO COMMIT"
+
+    if [ "$INPUT_ADD_COMMENT" = true ]; then
+      comment_to_pull_request "Crowdin action has been triggered but translations were already up-to-date."
+    fi
+
     return
   fi
 
@@ -263,7 +268,19 @@ push_to_branch() {
 
   if [ "$INPUT_CREATE_PULL_REQUEST" = true ]; then
     create_pull_request "${BRANCH}"
+  elif [ "$INPUT_ADD_COMMENT" = true ]; then
+    comment_to_pull_request "Crowdin action has been triggered and translations have been synchronized! 🎉"
   fi
+}
+
+comment_to_pull_request() {
+  COMMENT_BODY="$1"
+
+  curl -s -X POST \
+    -H "Authorization: Bearer ${{ GITHUB_TOKEN }}" \
+    -H "Content-Type: application/json" \
+    -d "{\"body\": \"$COMMENT_BODY\"}" \
+    "https://api.github.com/repos/$REPOSITORY/issues/$ISSUE_NUMBER/comments"
 }
 
 view_debug_output() {
