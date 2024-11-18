@@ -122,6 +122,10 @@ inputs:
     description: 'Skip default git checkout on GITHUB_REF'
     default: 'false'
     required: false
+  add_comment:
+    description: 'Add comment on the PR'
+    default: 'false'
+    required: false
 
   # global options
   crowdin_branch_name:
